@@ -10,23 +10,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define NMax 10
-#define MMax 15
-
-typedef struct Graph {
+struct Graph {
     int numVertices;
-    int adjMatrix[NMax][MMax];
-}Graph;
+    int** adjMatrix;
+};
 
 // Fungsi unutk mendeteksi siklus di Graph menggunakan prinsip DFS
 // Source Code : https://www.geeksforgeeks.org/c/graph-cycle-detection-in-c/
-int dfsCycleDetection(struct Graph* graph, int vertex, int* visited, int parent) {
+int dfsCycleDetection(struct Graph *graf, int vertex, int* visited, int parent) {
     visited[vertex] = 1;
 
-    for (int i = 0; i < graph->numVertices; i++) {
-        if (graph->adjMatrix[vertex][i]) {
+    for (int i = 0; i < graf->numVertices; i++) {
+        if (graf->adjMatrix[vertex][i]) {
             if (!visited[i]) {
-                if (dfsCycleDetection(graph, i, visited, vertex)) {
+                if (dfsCycleDetection(graf, i, visited, vertex)) {
                     return 1;
                 }
             }
@@ -40,15 +37,15 @@ int dfsCycleDetection(struct Graph* graph, int vertex, int* visited, int parent)
 
 // Fungsi untuk mendeteksi siklus di Graph
 // Source Code : https://www.geeksforgeeks.org/c/graph-cycle-detection-in-c/
-int detectCycle(struct Graph* graph) {
-    int* visited = (int*)malloc(graph->numVertices * sizeof(int));
-    for (int i = 0; i < graph->numVertices; i++) {
+int detectCycle(struct Graph *graf) {
+    int *visited = malloc(graf->numVertices*sizeof(int));
+    for (int i = 0; i < graf->numVertices; i++) {
         visited[i] = 0;
     }
 
-    for (int i = 0; i < graph->numVertices; i++) {
+    for (int i = 0; i < graf->numVertices; i++) {
         if (!visited[i]) {
-            if (dfsCycleDetection(graph, i, visited, -1)) {
+            if (dfsCycleDetection(graf, i, visited, -1)) {
                 return 1;
             }
         }
@@ -59,22 +56,35 @@ int detectCycle(struct Graph* graph) {
 int main() {
     int N, M;
 
-    scanf("%d%d", &N, &M);
+    scanf("%d", &N);
+    scanf("%d", &M);
 
-    Graph *graf = malloc(sizeof(Graph));
-
+    struct Graph *graf = malloc(sizeof(struct Graph));
+    graf->adjMatrix = malloc(N * sizeof(int));
     graf->numVertices = N;
+    for (int i=0; i<N; i++) {
+        graf->adjMatrix[i] = malloc(N*sizeof(int));
+        for (int j=0; j<N; j++) {
+            graf->adjMatrix[i][j] = 0;
+        }
+    }
 
     for (int i=0; i<M; i++) {
         int a, b;
-        scanf("%d%d", &a, &b);
+        scanf("%d", &a);
+        scanf("%d", &b);
         graf->adjMatrix[a][b] = 1;
+        graf->adjMatrix[b][a] = 1;
     }
-    if (detectCycle) {
+
+    if (detectCycle(graf)) {
         printf("TIDAK BISA");
     } else {
         printf("BISA");
     }
+
+    free(graf->adjMatrix);
+    free(graf);
 
     return 0;
 }
