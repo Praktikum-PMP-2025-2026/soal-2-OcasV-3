@@ -42,7 +42,7 @@ int detectCycle(struct Graph *graf) {
     for (int i = 0; i < graf->numVertices; i++) {
         visited[i] = 0;
     }
-
+    
     for (int i = 0; i < graf->numVertices; i++) {
         if (!visited[i]) {
             if (dfsCycleDetection(graf, i, visited, -1)) {
@@ -60,10 +60,10 @@ int main() {
     scanf("%d", &M);
 
     struct Graph *graf = malloc(sizeof(struct Graph));
-    graf->adjMatrix = malloc(N * sizeof(int));
+    graf->adjMatrix = (int**) malloc(N * sizeof(int));
     graf->numVertices = N;
     for (int i=0; i<N; i++) {
-        graf->adjMatrix[i] = malloc(N*sizeof(int));
+        graf->adjMatrix[i] = (int*) malloc(N*sizeof(int));
         for (int j=0; j<N; j++) {
             graf->adjMatrix[i][j] = 0;
         }
