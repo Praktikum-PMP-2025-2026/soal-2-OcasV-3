@@ -60,7 +60,7 @@ int main() {
     scanf("%d", &M);
 
     // Inisialisai Graph
-    struct Graph *graf = malloc(sizeof(struct Graph));
+    struct Graph *graf = (struct Graph*) malloc(sizeof(struct Graph));
     graf->adjMatrix = (int**) malloc(N * sizeof(int));
     graf->numVertices = N;
     for (int i=0; i<N; i++) {
