@@ -59,16 +59,18 @@ int main() {
     scanf("%d", &N);
     scanf("%d", &M);
 
+    // Inisialisai Graph
     struct Graph *graf = malloc(sizeof(struct Graph));
     graf->adjMatrix = (int**) malloc(N * sizeof(int));
     graf->numVertices = N;
     for (int i=0; i<N; i++) {
         graf->adjMatrix[i] = (int*) malloc(N*sizeof(int));
         for (int j=0; j<N; j++) {
-            graf->adjMatrix[i][j] = 0;
+            graf->adjMatrix[i][j] = 0;      // 0 : Tidak Terhubung, 1 : Terhubung
         }
     }
 
+    // Menempatakan edge
     for (int i=0; i<M; i++) {
         int a, b;
         scanf("%d", &a);
