@@ -17,21 +17,22 @@ struct Graph {
 
 // Fungsi unutk mendeteksi siklus di Graph menggunakan prinsip DFS
 // Source Code : https://www.geeksforgeeks.org/c/graph-cycle-detection-in-c/
-int dfsCycleDetection(struct Graph *graf, int vertex, int* visited, int parent) {
+int dfsCycleDetection(struct Graph *graf, int vertex, int* visited) {
     visited[vertex] = 1;
 
     for (int i = 0; i < graf->numVertices; i++) {
         if (graf->adjMatrix[vertex][i]) {
-            if (!visited[i]) {
-                if (dfsCycleDetection(graf, i, visited, vertex)) {
+            if (visited[i]) {
+                return 1;
+            } else if (!visited[i]) {
+                if (dfsCycleDetection(graf, i, visited)) {
                     return 1;
                 }
             }
-            else if (i != parent) {
-                return 1;
-            }
         }
     }
+
+    visited[vertex] = 2;
     return 0;
 }
 
@@ -45,11 +46,13 @@ int detectCycle(struct Graph *graf) {
     
     for (int i = 0; i < graf->numVertices; i++) {
         if (!visited[i]) {
-            if (dfsCycleDetection(graf, i, visited, -1)) {
+            if (dfsCycleDetection(graf, i, visited)) {
+                free(visited);
                 return 1;
             }
         }
     }
+    free(visited);
     return 0;
 }
 
@@ -61,7 +64,7 @@ int main() {
 
     // Inisialisai Graph
     struct Graph *graf = (struct Graph*) malloc(sizeof(struct Graph));
-    graf->adjMatrix = (int**) malloc(N * sizeof(int));
+    graf->adjMatrix = malloc(N * sizeof(int*));
     graf->numVertices = N;
     for (int i=0; i<N; i++) {
         graf->adjMatrix[i] = (int*) malloc(N*sizeof(int));
@@ -75,7 +78,6 @@ int main() {
         int a, b;
         scanf("%d", &a);
         scanf("%d", &b);
-        graf->adjMatrix[a][b] = 1;
         graf->adjMatrix[b][a] = 1;
     }
 
@@ -85,6 +87,9 @@ int main() {
         printf("BISA");
     }
 
+    for (int i=0; i<N; i++) {
+        free(graf->adjMatrix[i]);
+    }
     free(graf->adjMatrix);
     free(graf);
 
