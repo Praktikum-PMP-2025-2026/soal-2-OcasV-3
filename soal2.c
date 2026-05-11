@@ -21,10 +21,10 @@ int dfsCycleDetection(struct Graph *graf, int vertex, int* visited) {
     visited[vertex] = 1;
 
     for (int i = 0; i < graf->numVertices; i++) {
-        if (graf->adjMatrix[vertex][i]) {
-            if (visited[i]) {
+        if (graf->adjMatrix[vertex][i] == 1) {
+            if (visited[i] == 1) {
                 return 1;
-            } else if (!visited[i]) {
+            } else if (visited[i] == 0) {
                 if (dfsCycleDetection(graf, i, visited)) {
                     return 1;
                 }
@@ -78,7 +78,7 @@ int main() {
         int a, b;
         scanf("%d", &a);
         scanf("%d", &b);
-        graf->adjMatrix[b][a] = 1;
+        graf->adjMatrix[a][b] = 1;
     }
 
     if (detectCycle(graf)) {
