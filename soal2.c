@@ -71,9 +71,9 @@ int main() {
         graf->adjMatrix[a][b] = 1;
     }
     if (detectCycle) {
-        printf("Ada siklus!");
+        printf("BISA");
     } else {
-        printf("Tidak ada siklus!");
+        printf("TIDAK BISA");
     }
 
     return 0;
