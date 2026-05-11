@@ -38,7 +38,7 @@ int dfsCycleDetection(struct Graph *graf, int vertex, int* visited, int parent) 
 // Fungsi untuk mendeteksi siklus di Graph
 // Source Code : https://www.geeksforgeeks.org/c/graph-cycle-detection-in-c/
 int detectCycle(struct Graph *graf) {
-    int *visited = malloc(graf->numVertices*sizeof(int));
+    int *visited = (int*) malloc(graf->numVertices*sizeof(int));
     for (int i = 0; i < graf->numVertices; i++) {
         visited[i] = 0;
     }
