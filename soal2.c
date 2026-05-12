@@ -10,28 +10,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Struktur data untuk merepresentasikan Graph
 struct Graph {
     int numVertices;
     int** adjMatrix;
 };
 
-// Fungsi unutk mendeteksi siklus di Graph menggunakan prinsip DFS
+// Fungsi untuk mendeteksi siklus di Graph menggunakan prinsip DFS
 // Source Code : https://www.geeksforgeeks.org/c/graph-cycle-detection-in-c/
 int dfsCycleDetection(struct Graph *graf, int vertex, int* visited) {
+    // Menandai vertex saat ini sebagai sedang dijelajahi
     visited[vertex] = 1;
 
+    // Menjelajahi seluruh vertex
     for (int i = 0; i < graf->numVertices; i++) {
         if (graf->adjMatrix[vertex][i] == 1) {
-            if (visited[i] == 1) {
+            if (visited[i] == 1) {      // Kembali ke vertex utama
                 return 1;
             } else if (visited[i] == 0) {
-                if (dfsCycleDetection(graf, i, visited)) {
+                if (dfsCycleDetection(graf, i, visited)) {      // Terdapat siklus
                     return 1;
                 }
             }
         }
     }
 
+    // Menandai vertex saat ini sebagai sudah selesai dijelajahi
     visited[vertex] = 2;
     return 0;
 }
@@ -39,14 +43,16 @@ int dfsCycleDetection(struct Graph *graf, int vertex, int* visited) {
 // Fungsi untuk mendeteksi siklus di Graph
 // Source Code : https://www.geeksforgeeks.org/c/graph-cycle-detection-in-c/
 int detectCycle(struct Graph *graf) {
+    // Inisialisasi visited array untuk menyimpan status setiap vertex
     int *visited = (int*) malloc(graf->numVertices*sizeof(int));
     for (int i = 0; i < graf->numVertices; i++) {
         visited[i] = 0;
     }
     
+    // Menjelajahi seluruh vertex untuk mendeteksi siklus
     for (int i = 0; i < graf->numVertices; i++) {
         if (!visited[i]) {
-            if (dfsCycleDetection(graf, i, visited)) {
+            if (dfsCycleDetection(graf, i, visited)) {      // Terdapat siklus
                 free(visited);
                 return 1;
             }
@@ -57,8 +63,8 @@ int detectCycle(struct Graph *graf) {
 }
 
 int main() {
+    // Membaca jumlah vertex (misi) dan edge (ketergantungan)
     int N, M;
-
     scanf("%d", &N);
     scanf("%d", &M);
 
@@ -81,12 +87,14 @@ int main() {
         graf->adjMatrix[a][b] = 1;
     }
 
-    if (detectCycle(graf)) {
+    // Menentukan output(ada siklus atau tidak)
+    if (detectCycle(graf)) {    // Ada siklus
         printf("TIDAK BISA");
-    } else {
+    } else {                    // Tidak ada siklus
         printf("BISA");
     }
 
+    // Free semua memori
     for (int i=0; i<N; i++) {
         free(graf->adjMatrix[i]);
     }
